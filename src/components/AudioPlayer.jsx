@@ -23,7 +23,7 @@ const AudioPlayer = (audioSrc ) => {
   }, [audioSrc]);
 
   if (loading) {
-    return <p>Loading audio...</p>;
+    return <p>Loading...</p>;
   }
 
   if (error) {

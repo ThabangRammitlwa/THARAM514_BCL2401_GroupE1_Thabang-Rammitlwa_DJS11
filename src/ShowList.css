@@ -1,0 +1,23 @@
+.show-list{
+    list-style: none;
+    padding:0;
+    margin:0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+
+}
+
+.show-item{
+    background-color: black;
+    border-radius: 5px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 20, 0);
+    transition: 0.3s ease;
+}
+
+.show-title{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
