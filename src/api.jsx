@@ -20,12 +20,12 @@ export const fetchGenre = async (genreId) => {
   }
 };
 
-export const fetchShowDetails = async (showId) => {
+export const fetchShowList = async (showId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/id/${showId}`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching show details:', error);
+    console.error('Error fetching show list:', error);
     throw error;
   }
 };

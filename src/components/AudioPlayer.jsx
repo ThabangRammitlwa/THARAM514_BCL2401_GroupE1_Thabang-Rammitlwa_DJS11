@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { AudioSrc } from './api';
+import { AudioSrc } from '../api';
 
-const AudioPlayer = () => {
+const AudioPlayer = () => { 
   const [audioSrc, setAudioSrc] = useState('');
 
   useEffect(() => {
