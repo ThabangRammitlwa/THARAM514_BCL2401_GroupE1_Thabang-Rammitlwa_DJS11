@@ -22,6 +22,7 @@ const ShowList = () => {
       {shows.map(show => (
         <li key={show.id}>
           <h2>{show.title}</h2>
+          <img src={show.image} alt={show.title} />
         </li>
       ))}
     </ul>

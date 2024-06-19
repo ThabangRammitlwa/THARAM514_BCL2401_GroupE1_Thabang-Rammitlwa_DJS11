@@ -1,17 +1,39 @@
 import { useState, useEffect } from 'react';
-import { AudioSrc } from '../api';
+import { fetchAudioPlayer } from '../api';
 
-const AudioPlayer = () => { 
-  const [audioSrc, setAudioSrc] = useState('');
+const AudioPlayer = (audioSrc ) => {
+  const [audioData, setAudioData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    AudioSrc().then(src => setAudioSrc(src));
-  }, []);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchAudioPlayer(audioSrc);
+        setAudioData(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [audioSrc]);
+
+  if (loading) {
+    return <p>Loading audio...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div>
-      {audioSrc && (
-        <audio src={audioSrc} controls />
+      {audioData && (
+        <audio src={audioData.url} controls />
       )}
     </div>
   );
