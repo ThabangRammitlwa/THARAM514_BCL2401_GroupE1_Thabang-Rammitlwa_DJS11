@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { getAudioSrc } from './api';
+import { AudioSrc } from './api';
 
-const AudioPlayerComponent = () => {
+const AudioPlayer = () => {
   const [audioSrc, setAudioSrc] = useState('');
 
   useEffect(() => {
-    getAudioSrc().then(src => setAudioSrc(src));
+    AudioSrc().then(src => setAudioSrc(src));
   }, []);
 
   return (
@@ -17,4 +17,4 @@ const AudioPlayerComponent = () => {
   );
 };
 
-export default AudioPlayerComponent;
+export default AudioPlayer;

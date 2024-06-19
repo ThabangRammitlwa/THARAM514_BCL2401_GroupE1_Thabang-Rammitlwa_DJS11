@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { getShows } from '../api/shows';
+import { Shows } from '../api';
 
 const ShowList = () => {
   const [shows, setShows] = useState([]);
 
   useEffect(() => {
-    getShows().then(data => setShows(data));
+    Shows().then(data => setShows(data));
   }, []);
 
   return (

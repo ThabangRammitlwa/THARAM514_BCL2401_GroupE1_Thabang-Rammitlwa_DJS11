@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {useParams} from 'react-router-dom'
-import { getShow } from '../api/show';
+import { Show } from '../api';
 
 const Show = () => {
     const { id } = useParams();
