@@ -3,6 +3,7 @@ import Show from './components/Show';
 import Genre from './components/Genre';
 import Episode from './components/Episode';
 import ShowList from './components/ShowList';
+import Favourites from './components/Favourites';
 import AudioPlayer from './components/AudioPlayer';
 
 function App() {
@@ -11,7 +12,8 @@ function App() {
     <Routes>
       <Route path="/" element={<ShowList />} />
       <Route path="/show/:showId" element={<Show />} />
-      <Route path="/episode/:episodeId" element={<Episode />} />
+        <Route path="/episode/:episodeId" element={<Episode />} />
+        <Route path="/favourite/favouriteId"element={<Favourites/>}/>
       <Route path="/genre/:genreId" element={<Genre />} />
     </Routes>
     <AudioPlayer />
