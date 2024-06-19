@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
-import { Shows } from '../api';
+import { fetchShowList } from '../api'
 
 const ShowList = () => {
   const [shows, setShows] = useState([]);
 
   useEffect(() => {
-    Shows().then(data => setShows(data));
+    const fetchData = async () => {
+      try {
+        const data = await fetchShowList();
+        setShows(data);
+      } catch (error) {
+        console.error('Error fetching show list:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -19,4 +28,4 @@ const ShowList = () => {
   );
 };
 
-export default ShowList
+export default ShowList;

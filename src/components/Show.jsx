@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import {useParams} from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { fetchShow } from '../api';
 
 
 const Show = () => {
@@ -7,16 +8,16 @@ const Show = () => {
     const [show, setShow] = useState({});
 
   useEffect(() => {
-    const fetchShow = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`/api/shows/${id}`); 
-        setShow(response.data);
+        const data = await fetchShow(id); 
+        setShow(data);
       } catch (error) {
         console.error('Error fetching show:', error);
       }
     };
 
-    fetchShow();
+    fetchData();
   }, [id]);
 
   return (
