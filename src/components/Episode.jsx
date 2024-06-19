@@ -1,18 +1,13 @@
 import  { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import fetchEpisode from '../api'
 
 const Episode = () => {
   const { episodeId } = useParams();
   const [episode, setEpisode] = useState(null);
 
   useEffect(() => {
-    const fetchEpisode = async () => {
-      const response = await fetch(`https://podcast-api.netlify.app/id/${episodeId}`);
-      const data = await response.json();
-      setEpisode(data);
-    };
-
-    fetchEpisode();
+    fetchEpisode(episodeId).then((data) => setEpisode(data))
   }, [episodeId]);
 
   return (

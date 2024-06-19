@@ -29,3 +29,12 @@ export const fetchShowDetails = async (showId) => {
     throw error;
   }
 };
+export const fetchAudioPlayer = async (audiosrc) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/id/${audiosrc}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching AudioPlayer:', error);
+        throw error;
+    }
+}
