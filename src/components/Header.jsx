@@ -63,7 +63,7 @@ const Header = () => {
                 variant={'ghost'}
                 colorScheme={'purple'}
               >
-                <Link to={'/favourit'}>Favourits</Link>
+                <Link to={'/favourite'}>Favourites</Link>
               </Button>
 
               <Button

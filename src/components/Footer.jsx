@@ -2,7 +2,7 @@ import { Box, Button, HStack, Heading, Input, Stack, VStack, Text } from '@chakr
 import { AiOutlineSend } from "react-icons/ai"
 
 const Footer = () => {
-  return <Box bgColor={"blackAlpha.900"} minH={"40"} p="16" color={"white"}>
+  return <Box bgColor={"blue.700"} minH={"40"} p="16" color={"white"}>
 
     <Stack direction={['column', 'row']}>
       <VStack
@@ -36,11 +36,11 @@ const Footer = () => {
         borderLeft={['none', '1px solid white']}
         borderRight={['none', '1px solid white']}
       >
-        <Heading textTransform={'uppercase'} textAlign={'center'}>
+        <Heading textTransform={'uppercase'} textAlign={'center'} > 
           Thabang Podcast Stream 
         </Heading>
         <Text>
-          Enjoy your favourit Podcasts 
+          Enjoy your favourite Podcasts 
         </Text>
 
       </VStack>
@@ -58,11 +58,11 @@ const Footer = () => {
         </Button>
 
         <Button variant={'link'} colorScheme={'white'}>
-          <a target={'blank'} href="https://youtube.com">Instagram</a>
+          <a target={'blank'} href="https://intagram.com">Instagram</a>
         </Button>
 
         <Button variant={'link'} colorScheme={'white'}>
-          <a target={'blank'} href="https://youtube.com">Github</a>
+          <a target={'blank'} href="https://Github.com">Github</a>
         </Button>
 
 
