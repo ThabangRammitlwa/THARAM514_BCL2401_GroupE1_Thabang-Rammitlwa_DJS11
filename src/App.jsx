@@ -1,30 +1,23 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Header from './pages/Header';
-import Show from './components/Show';
-import Genre from './components/Genre';
-import Episode from './components/Episode';
-import ShowList from './components/ShowList';
-import Favourites from './components/Favourites';
-import AudioPlayer from './components/AudioPlayer';
+import { BrowserRouter as Router, Route,Routes } from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Home from './components/Home'
+import Favourits from './components/Favourites'
+import AudioPlayer from './components/AudioPlayer'
+import Podcast from './components/Podcast'
 
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shows" element={<ShowList />} />
-        <Route path="/show/:showId" element={<Show />} />
-        <Route path="/genre/:genre" element={<Genre />} />
-        <Route path="/episode/:episodeId" element={<Episode />} />
-        <Route path="/favourites" element={<Favourites />} />
-      </Routes>
-      
-    <AudioPlayer />
-  </BrowserRouter>
-  )
+const App = () => {
+  return <Router>
+    <Header/>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/podcast" element={<Podcast />} />
+      <Route path="/favourite" element={<Favourits />} />
+      <Route path="audioplayer" element={<AudioPlayer />} />
+    </Routes>
+    <Footer />    
+    
+    </Router>
 }
 
 export default App
