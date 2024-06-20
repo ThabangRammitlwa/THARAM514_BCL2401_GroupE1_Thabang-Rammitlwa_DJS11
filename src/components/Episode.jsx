@@ -1,13 +1,23 @@
 import  { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {fetchEpisode } from '../api'
+import { fetchEpisode } from '../api'
+import AudioPlayer from './AudioPlayer';
 
 const Episode = () => {
   const { episodeId } = useParams();
   const [episode, setEpisode] = useState(null);
 
   useEffect(() => {
-    fetchEpisode(episodeId).then((data) => setEpisode(data))
+    const fetchData = async () => {
+      try {
+        const data = await fetchEpisode(episodeId);
+        setEpisode(data);
+      } catch (error) {
+        console.error('Error fetching episode:', error);
+      }
+    };
+
+    fetchData();
   }, [episodeId]);
 
   return (
@@ -15,7 +25,7 @@ const Episode = () => {
       {episode ? (
         <div>
           <h2>{episode.title}</h2>
-          <audio src={episode.file} controls />
+          <AudioPlayer audio src={episode.file} controls />
           {}
         </div>
       ) : (

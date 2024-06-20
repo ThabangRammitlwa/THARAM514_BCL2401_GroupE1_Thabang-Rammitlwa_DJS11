@@ -8,18 +8,20 @@ import ShowList from './components/ShowList';
 import Favourites from './components/Favourites';
 import AudioPlayer from './components/AudioPlayer';
 
+
 function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
-        <Route path="/" element={<Header />} />
         <Route path="/" element={<Home />} />
-        <Route path="/show/:id" element={<Show />} />
-        <Route path="/genre/:genre" element={<Genre />} />
-        <Route path="/episode/:id" element={<Episode />} />
         <Route path="/shows" element={<ShowList />} />
+        <Route path="/show/:showId" element={<Show />} />
+        <Route path="/genre/:genre" element={<Genre />} />
+        <Route path="/episode/:episodeId" element={<Episode />} />
         <Route path="/favourites" element={<Favourites />} />
-    </Routes>
+      </Routes>
+      
     <AudioPlayer />
   </BrowserRouter>
   )

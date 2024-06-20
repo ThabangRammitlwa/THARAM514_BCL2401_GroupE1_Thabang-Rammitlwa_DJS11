@@ -9,7 +9,8 @@ const ShowList = () => {
     const fetchData = async () => {
       try {
         const data = await fetchShowList();
-        setShows(data);
+        const sortedShows = data.sort((a, b) => a.title.localCompare(b.title));
+        setShows(sortedShows);
       } catch (error) {
         console.error('Error fetching show list:', error);
       }
@@ -19,10 +20,12 @@ const ShowList = () => {
   }, []);
 
   return (
+
     <ul>
       {shows.map(show => (
         <li key={show.id}>
           <h2>{show.title}</h2>
+          <span>{show.genre}</span>
           <img src={show.image} alt={show.title} />
         </li>
       ))}
