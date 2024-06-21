@@ -60,6 +60,7 @@ const Podcast = () => {
   const [episodes, setEpisodes] = useState([]);
   const [seasons, setSeasons] = useState([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [currentAudio, setCurrentAudio] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const itemsPerPage = 12;
 
@@ -115,8 +116,19 @@ const Podcast = () => {
 
   const handleGenreSelect = (genreId) => {
     setSelectedGenre(genreId);
-    setPage(1); // Reset to first page when changing genre
+    setPage(1);
   };
+
+  const playAudio = (audioUrl) => {
+    if (currentAudio) {
+      currentAudio.pause();
+    }
+    const audio = new Audio(audioUrl);
+    audio.play();
+    setCurrentAudio(audio);
+  };
+
+  
 
   const filteredPodcasts = selectedGenre
     ? podcastData.filter(podcast => podcast.genreId === selectedGenre)
@@ -228,13 +240,26 @@ const Podcast = () => {
                       <AccordionIcon />
                     </AccordionButton>
                   </h2>
-                  <AccordionPanel pb={4}>
-                    {episodes.map((episode, index) => (
-                      <Box key={index} mb={2}>
-                        <Text fontWeight="bold">{episode.title}</Text>
-                        <Text fontSize="sm">{episode.description}</Text>
-                      </Box>
-                    ))}
+                    <AccordionPanel pb={4}>
+                        
+                          {episodes.map((episode, index) => (
+                            <Box key={index} mb={2}>
+                              <HStack justifyContent="space-between">
+                                <VStack align="start">
+                                  <Text fontWeight="bold">{episode.title}</Text>
+                                  <Text fontSize="sm">{episode.description}</Text>
+                                </VStack>
+                                <Button
+                                  size="sm"
+                                  leftIcon={<FaPlay />}
+                                  onClick={() => playAudio(episode.audioUrl)}
+                                >
+                                  Play
+                                </Button>
+                              </HStack>
+                            </Box>
+                          ))
+                        }
                   </AccordionPanel>
                 </AccordionItem>
 
@@ -252,6 +277,7 @@ const Podcast = () => {
                       <Box key={index} mb={2}>
                         <Text fontWeight="bold">{season.title}</Text>
                         <Text fontSize="sm">{season.description}</Text>
+                       
                       </Box>
                     ))}
                   </AccordionPanel>
