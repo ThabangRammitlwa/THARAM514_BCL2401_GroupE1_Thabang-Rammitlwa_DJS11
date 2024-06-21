@@ -85,8 +85,8 @@ const Podcast = () => {
                   <Button size="sm" variant='ghost'w='50%' leftIcon={<FaPlay />}flex={1}>
                     Play
                   </Button>
-                  <Button size="sm" colorScheme='red'w='50%' rightIcon={<BiHeart />}flex={1}>
-                    like
+                  <Button size="sm" color='purple.400'w='50%' rightIcon={<BiHeart />}flex={1}>
+                    Like
                     </Button>
                     </HStack>
                     </VStack>
@@ -98,7 +98,7 @@ const Podcast = () => {
                 key={pageIndex}
                 size="sm"
                 variant={pageIndex + 1 === page ? 'solid' : 'outline'}
-                colorScheme="red"
+                colorScheme="purple"
                 onClick={() => changePage(pageIndex + 1)}
               >
                 {pageIndex + 1}
@@ -119,10 +119,10 @@ const Podcast = () => {
             <Text mt={2}>Duration: {selectedPodcast?.duration}</Text>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="purple" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Listen Now</Button>
+            <Button variant="ghost">View</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
