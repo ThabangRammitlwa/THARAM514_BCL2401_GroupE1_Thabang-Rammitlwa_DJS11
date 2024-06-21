@@ -57,13 +57,6 @@ const Header = () => {
               >
                 <Link to={'/podcast'}>Podcasts</Link>
                 </Button>        
-                <Button
-                onClick={onClose}
-                variant={'ghost'}
-                colorScheme={'purple'}
-              >
-                <Link to={'/genres'}>Genres</Link>
-              </Button>
                 
               <Button
                 onClick={onClose}

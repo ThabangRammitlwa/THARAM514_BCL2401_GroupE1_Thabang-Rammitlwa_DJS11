@@ -1,9 +1,12 @@
+import { Container, Heading, Text } from '@chakra-ui/react';
 
-
-const Favourites = () => {
+const Favorites = () => {
   return (
-    <div>Favourites</div>
-  )
-}
+    <Container maxW={'container.xl'} py={8}>
+      <Heading mb={4}>Your Favorites</Heading>
+      <Text>Your favorite podcasts will appear here.</Text>
+    </Container>
+  );
+};
 
-export default Favourites
+export default Favorites;
