@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { server } from '../main';
 import axios from 'axios';
-import { Box, Image, Text, Container, SimpleGrid, Button, VStack, HStack} from '@chakra-ui/react';
+import { Box, Image, Text, Container, SimpleGrid, Button, VStack, HStack,  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
+  useDisclosure} from '@chakra-ui/react';
 import { BiHeart } from 'react-icons/bi';
 import Loader from './Loader';
 import Error from './Error';
@@ -12,6 +13,8 @@ const Podcast = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
+  const [selectedPodcast, setSelectedPodcast] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const itemsPerPage = 12; // Increased to show more items per page
 
   useEffect(() => {
@@ -32,6 +35,11 @@ const Podcast = () => {
     setPage(pageNumber);
   };
 
+  const handlePodcastClick = (podcast) => {
+    setSelectedPodcast(podcast);
+    onOpen();
+  };
+
   const startIndex = (page - 1) * itemsPerPage;
   const currentItems = podcastData.slice(startIndex, startIndex + itemsPerPage);
   const totalPages = Math.ceil(podcastData.length / itemsPerPage);
@@ -47,7 +55,7 @@ const Podcast = () => {
           <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={6}>
               {currentItems.map((podcast, index) => (
                <VStack key={index} align="stretch" spacing={2}>
-              <Box key={index} position="relative" overflow="hidden" borderRadius="lg">
+              <Box key={index} position="relative" overflow="hidden" borderRadius="lg" cursor="pointer"    onClick={() => handlePodcastClick(podcast)}>
                 <Image 
                   src={podcast.image} 
                   alt={podcast.title} 
@@ -99,6 +107,25 @@ const Podcast = () => {
           </SimpleGrid>
         </VStack>
       )}
+
+<Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{selectedPodcast?.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Image src={selectedPodcast?.image} alt={selectedPodcast?.title} mb={4} />
+            <Text>{selectedPodcast?.description}</Text>
+            <Text mt={2}>Duration: {selectedPodcast?.duration}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Listen Now</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };
