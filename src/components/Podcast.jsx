@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Box, Image, Text, Container, SimpleGrid, Button, VStack, HStack,  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
   useDisclosure} from '@chakra-ui/react';
 import { BiHeart } from 'react-icons/bi';
+import { FaPlay, FaSortAlphaDown, FaSortAlphaUp } from "react-icons/fa";
 import Loader from './Loader';
 import Error from './Error';
-import { FaPlay } from "react-icons/fa"
 
 const Podcast = () => {
   const [podcastData, setPodcastData] = useState([]);
@@ -14,14 +14,16 @@ const Podcast = () => {
   const [error, setError] = useState(false);
   const [page, setPage] = useState(1);
   const [selectedPodcast, setSelectedPodcast] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const itemsPerPage = 12; // Increased to show more items per page
+  const itemsPerPage = 12; 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`${server}`);
-        setPodcastData(data);
+        const sortedData=data.sort((a, b) => a.title.localeCompare(b.title));
+        setPodcastData(sortedData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -30,6 +32,16 @@ const Podcast = () => {
     };
     fetchData();
   }, []);
+
+  const toggleSortOrder = () => {
+    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newOrder);
+    const sortedData = [...podcastData].sort((a, b) => 
+      newOrder === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
+    );
+    setPodcastData(sortedData);
+  };
+
 
   const changePage = (pageNumber) => {
     setPage(pageNumber);
@@ -51,7 +63,14 @@ const Podcast = () => {
       {loading ? (
         <Loader />
       ) : (
-        <VStack spacing={8}>
+          <VStack spacing={8}>
+              <Button 
+            onClick={toggleSortOrder} 
+            mb={4} 
+            leftIcon={sortOrder === 'asc' ? <FaSortAlphaDown /> : <FaSortAlphaUp />}
+          >
+            Sort {sortOrder === 'asc' ? 'Descending' : 'Ascending'}
+          </Button>
           <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={6}>
               {currentItems.map((podcast, index) => (
                <VStack key={index} align="stretch" spacing={2}>

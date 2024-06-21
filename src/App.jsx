@@ -5,6 +5,7 @@ import Home from './components/Home'
 import Favourites from './components/Favourites'
 import AudioPlayer from './components/AudioPlayer'
 import Podcast from './components/Podcast'
+import Genres from './components/Genres'
 
 const App = () => {
   return <Router>
@@ -14,6 +15,7 @@ const App = () => {
       <Route path="/podcast" element={<Podcast />} />
       <Route path="/favourite" element={<Favourites />} />
       <Route path="audioplayer" element={<AudioPlayer />} />
+      <Route path="/genres" element={<Genres />} />
     </Routes>
     <Footer />    
     
