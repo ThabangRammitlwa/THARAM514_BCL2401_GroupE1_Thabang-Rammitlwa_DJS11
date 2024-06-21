@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 
 const Home = () => {
   return <Box
-  bgColor={'blue.400'}
+  bgColor={'blue.700'}
   w={'full'} h={'85vh'}>
   <motion.div style={{
     height:"80vh",

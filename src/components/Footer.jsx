@@ -2,7 +2,7 @@ import { Box, Button, HStack, Heading, Input, Stack, VStack, Text } from '@chakr
 import { AiOutlineSend } from "react-icons/ai"
 
 const Footer = () => {
-  return <Box bgColor={"blue.700"} minH={"40"} p="16" color={"white"}>
+  return <Box bgColor={"blue.900"} minH={"40"} p="16" color={"white"}>
 
     <Stack direction={['column', 'row']}>
       <VStack
