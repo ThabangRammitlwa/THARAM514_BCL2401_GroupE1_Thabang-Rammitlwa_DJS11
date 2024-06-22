@@ -1,5 +1,5 @@
 import { Box, Button, HStack, Heading, Input, Stack, VStack, Text } from '@chakra-ui/react';
-import { AiOutlineSend } from "react-icons/ai"
+import { FaRegArrowAltCircleRight } from "react-icons/fa"
 
 const Footer = () => {
   return <Box bgColor={"blue.900"} minH={"40"} p="16" color={"white"}>
@@ -18,6 +18,7 @@ const Footer = () => {
           py='2'
         >
           <Input
+            id="email-input"
             placeholder='Enter Email Here ... '
             border={'none'}
             borderRadius={'none'}
@@ -25,7 +26,7 @@ const Footer = () => {
             focusBorderColor='none'
           />
           <Button p={'0'} colorScheme='purple' varient={'ghost'} borderRadius={'0 20px 20px 0'}>
-            <AiOutlineSend size={20} />
+          <FaRegArrowAltCircleRight />
           </Button>
         </HStack>
 
@@ -47,8 +48,7 @@ const Footer = () => {
 
       <VStack
         w={'full'}
-      // borderlLeft={['none', '1px solid white']}
-      // borderRight={['none', '1px solid white']}
+
       >
         <Heading size={'md'} textTransform={'uppercase'}>
           Social Media

@@ -82,16 +82,7 @@ const Header = () => {
               w={'full'}
               justifyContent={'space-evenly'}
             >
-              <Button onClick={onClose} colorScheme={'purple'}>
-                <Link to={'/audioplayer'}>Listen</Link>
-              </Button>
-              {/* <Button
-                onClick={onClose}
-                colorScheme={'purple'}
-                variant={'outline'}
-              >
-                <Link to={'/signup'}>Sign Up</Link>
-              </Button> */}
+             
             </HStack>
           </DrawerBody>
         </DrawerContent>

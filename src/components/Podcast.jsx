@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { server } from '../main';
 import axios from 'axios';
 import { Box, Image, Text, Container, SimpleGrid, Button, VStack, HStack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure,Tag, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
-import { BiHeart } from 'react-icons/bi';
-import { FaPlay, FaSortAlphaDown, FaSortAlphaUp } from "react-icons/fa";
+import { FaPlay, FaSortAlphaDown, FaSortAlphaUp,FaStop } from "react-icons/fa";
 import Loader from './Loader';
 import Error from './Error';
 import PropTypes from 'prop-types';
+import Favourite from './Favourites';
+
+const API_BASE_URL = 'https://podcast-api.netlify.app';
 
 const genres = [
   { id: 1, title: 'Personal Growth' },
@@ -57,12 +59,27 @@ const Podcast = () => {
   const [selectedPodcast, setSelectedPodcast] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
   const [selectedGenre, setSelectedGenre] = useState(null);
-  const [episodes, setEpisodes] = useState([]);
-  const [seasons, setSeasons] = useState([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
+  const [favourites, setFavourites] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const itemsPerPage = 12;
+
+  const isFavourite = (podcastId) => {
+    return favourites[podcastId] !== undefined;
+  };
+  const handleLikeButtonClick = (podcast) => {
+    setFavourites(prevFavourites => {
+      const newFavourites = { ...prevFavourites };
+      if (newFavourites[podcast.id]) {
+        delete newFavourites[podcast.id];
+      } else {
+        newFavourites[podcast.id] = podcast;
+      }
+      return newFavourites;
+    });
+  
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +87,7 @@ const Podcast = () => {
         const { data } = await axios.get(`${server}`);
         const podcastsWithGenres = data.map(podcast => ({
           ...podcast,
-          genreId: Math.floor(Math.random() * 9) + 1, 
+          genreId: Math.floor(Math.random() * 9) + 1,
           seasonsCount: Math.floor(Math.random() * 10) + 1
         }));
         const sortedData = podcastsWithGenres.sort((a, b) => a.title.localeCompare(b.title));
@@ -80,14 +97,15 @@ const Podcast = () => {
         setLoading(false);
         setError(true);
       }
-    };
-    fetchData();
-  }, []);
+    }
+     
+      fetchData();
+    }, []);
 
   const toggleSortOrder = () => {
     const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     setSortOrder(newOrder);
-    const sortedData = [...podcastData].sort((a, b) => 
+    const sortedData = [...podcastData].sort((a, b) =>
       newOrder === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
     );
     setPodcastData(sortedData);
@@ -103,16 +121,14 @@ const Podcast = () => {
     onOpen();
 
     try {
-      const { data } = await axios.get(`${server}/podcast/${podcast.id}/details`);
-      setEpisodes(data.episodes);
-      setSeasons(data.seasons);
+      const { data } = await axios.get(`${API_BASE_URL}/id/${podcast.id}`);
+      setSelectedPodcast(data);
     } catch (error) {
       console.error('Error fetching podcast details:', error);
     } finally {
       setLoadingDetails(false);
     }
   };
-  
 
   const handleGenreSelect = (genreId) => {
     setSelectedGenre(genreId);
@@ -124,12 +140,24 @@ const Podcast = () => {
       currentAudio.pause();
     }
     const audio = new Audio(audioUrl);
-    audio.play();
+    audio.play().catch(e => {
+      console.error("Audio play failed:", e);
+    });
     setCurrentAudio(audio);
   };
 
-  
+  const stopAudio = () => {
+    if (currentAudio) {
+      currentAudio.pause();
+      setCurrentAudio(null);
+    }
+  };
+  const handleModalClose = () => {
+    onClose();
+    stopAudio();
+  };
 
+  
   const filteredPodcasts = selectedGenre
     ? podcastData.filter(podcast => podcast.genreId === selectedGenre)
     : podcastData;
@@ -183,14 +211,7 @@ const Podcast = () => {
                     </Text>
                   </Box>
                 </Box>
-                <HStack spacing={2} justify="space-between">
-                  <Button size="sm" variant='ghost' w='50%' leftIcon={<FaPlay />} flex={1}>
-                    Play
-                  </Button>
-                  <Button size="sm" color='purple.400' w='50%' rightIcon={<BiHeart />} flex={1}>
-                    Like
-                  </Button>
-                </HStack>
+               
                 <Tag size="sm" colorScheme="purple">
                   {genres.find(g => g.id === podcast.genreId)?.title || 'Unknown Genre'}
                 </Tag>
@@ -213,85 +234,71 @@ const Podcast = () => {
         </VStack>
       )}
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{selectedPodcast?.title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Image src={selectedPodcast?.image} alt={selectedPodcast?.title} mb={4} />
-            <Text>{selectedPodcast?.description}</Text>
-            <Text mt={2}>Duration: {selectedPodcast?.duration}</Text>
-            <Text mt={2}>Genre: {genres.find(g => g.id === selectedPodcast?.genreId)?.title || 'Unknown Genre'}</Text>
-            <Text mt={2}>
-            Genre: {genres.find(g => g.id === selectedPodcast?.genreId)?.title || 'Unknown Genre'} 
-              (ID: {selectedPodcast?.genreId})
-            </Text>
-            {loadingDetails ? (
-              <Loader />
-            ) : (
-              <Accordion allowMultiple mt={4}>
-                <AccordionItem>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        Episodes
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                    <AccordionPanel pb={4}>
-                        
-                          {episodes.map((episode, index) => (
-                            <Box key={index} mb={2}>
-                              <HStack justifyContent="space-between">
-                                <VStack align="start">
-                                  <Text fontWeight="bold">{episode.title}</Text>
-                                  <Text fontSize="sm">{episode.description}</Text>
-                                </VStack>
-                                <Button
-                                  size="sm"
-                                  leftIcon={<FaPlay />}
-                                  onClick={() => playAudio(episode.audioUrl)}
-                                >
-                                  Play
-                                </Button>
-                              </HStack>
-                            </Box>
-                          ))
-                        }
-                  </AccordionPanel>
-                </AccordionItem>
-
-                <AccordionItem>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex="1" textAlign="left">
-                        Seasons
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}>
-                    {seasons.map((season, index) => (
-                      <Box key={index} mb={2}>
-                        <Text fontWeight="bold">{season.title}</Text>
-                        <Text fontSize="sm">{season.description}</Text>
-                       
-                      </Box>
-                    ))}
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="purple" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">View</Button>
-          </ModalFooter>
-        </ModalContent>
+<Modal isOpen={isOpen} onClose={onClose} size="xl">
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>{selectedPodcast?.title}</ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+      <Image src={selectedPodcast?.image} alt={selectedPodcast?.title} mb={4} />
+      <Text>{selectedPodcast?.description}</Text>
+      {loadingDetails ? (
+        <Loader />
+      ) : (
+        <Accordion allowMultiple>
+          {selectedPodcast?.seasons.map((season, seasonIndex) => (
+            <AccordionItem key={seasonIndex}>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Season {season.season}
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                {season.episodes.map((episode, episodeIndex) => (
+                  <Box key={episodeIndex} mb={2}>
+                    <Text fontWeight="bold">{episode.title}</Text>
+                    <Text fontSize="sm">{episode.description}</Text>
+                    <Text fontSize="xs">Duration: {episode.duration}</Text>
+                    <Button 
+                      size="sm" 
+                      leftIcon={<FaPlay />} 
+                      onClick={() => playAudio(episode.file)}
+                      mt={2}
+                    >
+                      Play Episode
+                    </Button>
+                    <HStack spacing={2} justify="space-between">
+                    <Button 
+                        size="sm" 
+                        mt="3"
+                      leftIcon={<FaStop />} 
+                      onClick={() => stopAudio(episode.file)}
+                    >
+                      Stop Episode
+                      </Button>
+                      <Favourite
+                    podcast={selectedPodcast}
+                    initialIsFavourite={isFavourite(selectedPodcast.id)}
+                    onToggleFavourite={handleLikeButtonClick}
+                      />
+                      </HStack>
+                  </Box>
+                ))}
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      )}
+    </ModalBody>
+    <ModalFooter>
+      <Button colorScheme="purple" mr={3} onClick={handleModalClose}>
+        Close
+      </Button>
+    </ModalFooter>
+  </ModalContent>
       </Modal>
     </Container>
   );
